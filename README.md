@@ -25,7 +25,7 @@
 
 | Day | Focus | Services Covered | Deliverable | Notes |
 |:---:|-------|-----------------|-------------|:-----:|
-| **1** | [AWS Fundamentals](day-1-aws-fundamentals/note.md) | IAM, EC2, VPC, EBS, S3, Security Groups, CloudWatch | Secure web server on EC2 with nginx, CloudWatch logs, S3 bucket | [📓](day-1-aws-fundamentals/note.md) |
+| **1** | [AWS Fundamentals](day-1-aws-fundamentals/) | Cloud Concepts → EC2 → IAM → VPC → EBS → S3 → Security Groups → CloudWatch | Secure web server on EC2 with nginx, CloudWatch logs, S3 bucket | [📓](day-1-aws-fundamentals/01_cloud_concepts.md) · [📓](day-1-aws-fundamentals/02_ec2.md) |
 | **2** | [Real App on EC2](day-2-ec2-app-deployment/note.md) | EC2, Docker, FastAPI, PostgreSQL, S3 (static assets/backups) | FastAPI + PostgreSQL running on EC2 via Docker Compose | [📓](day-2-ec2-app-deployment/note.md) |
 | **3** | [Amazon EKS](day-3-eks-migration/note.md) | EKS, eksctl, kubectl, Load Balancer, IAM Roles | Existing K8s app migrated from kind to EKS with external LB | [📓](day-3-eks-migration/note.md) |
 | **4** | [Terraform IaC](day-4-terraform-eks/note.md) | Terraform, VPC Module, EKS Module, IAM, Remote State | VPC + EKS cluster + IAM roles provisioned as code | [📓](day-4-terraform-eks/note.md) |
@@ -130,8 +130,9 @@ complete-aws/
 ├── README.md                        # You are here
 ├── roadmap.png                      # Visual roadmap graphic
 │
-├── day-1-aws-fundamentals/          # IAM · EC2 · VPC · EBS · S3 · Security Groups · CloudWatch
-│   └── note.md
+├── day-1-aws-fundamentals/          # Cloud Concepts → EC2 → IAM → VPC → EBS → S3 → Security Groups → CloudWatch
+│   ├── 01_cloud_concepts.md
+│   └── 02_ec2.md
 │
 ├── day-2-ec2-app-deployment/        # FastAPI · PostgreSQL · Docker Compose · S3
 │   └── note.md
@@ -247,8 +248,8 @@ complete-aws/
 git clone https://github.com/yourusername/complete-aws.git
 cd complete-aws
 
-# Start with Day 1 fundamentals
-code day-1-aws-fundamentals/note.md
+# Start with fundamentals
+code day-1-aws-fundamentals/01_cloud_concepts.md
 ```
 
 Each day folder contains a `note.md` with objectives, concept explanations, step-by-step instructions, and CLI commands.
