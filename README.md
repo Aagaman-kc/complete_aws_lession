@@ -19,15 +19,16 @@
 |:-:|-------|---------------|-------------|
 | 1 | [Cloud Concepts](aws-fundamentals/cloud-concepts/01_cloud_concepts.md) | IaaS vs PaaS vs SaaS, deployment models, regions/AZs, shared responsibility, Well-Architected Framework | — |
 | 2 | [EC2](aws-fundamentals/ec2/02_ec2.md) | Instance types, AMIs, key pairs (SSH/RSA), security groups, user data, metadata, Elastic IP | Deploy K8s app on EC2 via kind |
-| 3 | [RDS](ec2-app-deployment/rds/01_rds.md) | Managed PostgreSQL, RDS vs self-hosted, Multi-AZ, read replicas | — |
-| 4 | [Docker Compose](ec2-app-deployment/docker-compose/02_docker_compose_deploy.md) | Multi-container orchestration, EBS volumes, env vars, secrets, S3 backups | FastAPI + PostgreSQL on EC2 |
-| 5 | [EKS Basics](eks-migration/eks-basics/01_eks_basics.md) | EKS architecture, eksctl, managed node groups, kubectl context | — |
-| 6 | [EKS Deployment](eks-migration/eks-deployment/02_eks_deployment.md) | Deploying manifests, ALB/NLB via Load Balancer Controller, IRSA | K8s app on EKS with LB |
-| 7 | [Terraform Fundamentals](terraform-eks/terraform-fundamentals/01_terraform_fundamentals.md) | Workflow (init/plan/apply), providers, resources, variables, outputs | — |
-| 8 | [Terraform State & Modules](terraform-eks/terraform-state-modules/02_terraform_state_modules.md) | Remote state (S3 + DynamoDB), community modules, dependency graph | EKS cluster via Terraform |
-| 9 | [CI/CD & ECR](portfolio-project/cicd-ecr/01_cicd_ecr.md) | GitHub Actions pipeline, ECR push/pull, automated deploy to EKS | — |
-| 10 | [HPA & Monitoring](portfolio-project/hpa-monitoring/02_hpa_monitoring.md) | Horizontal Pod Autoscaler, CloudWatch Container Insights | — |
-| 11 | [Repo Structure](portfolio-project/repo-structure/03_repo_structure.md) | infra/ vs app/ layout, README docs, cost hygiene | Production microservices platform |
+| 3 | [VPC](aws-fundamentals/vpc/03_vpc.md) | CIDR blocks, subnets (public/private), Internet Gateway, route tables, NAT Gateway, security groups, NACLs | Production VPC with bastion + private app server |
+| 4 | [RDS](ec2-app-deployment/rds/01_rds.md) | Managed PostgreSQL, RDS vs self-hosted, Multi-AZ, read replicas | — |
+| 5 | [Docker Compose](ec2-app-deployment/docker-compose/02_docker_compose_deploy.md) | Multi-container orchestration, EBS volumes, env vars, secrets, S3 backups | FastAPI + PostgreSQL on EC2 |
+| 6 | [EKS Basics](eks-migration/eks-basics/01_eks_basics.md) | EKS architecture, eksctl, managed node groups, kubectl context | — |
+| 7 | [EKS Deployment](eks-migration/eks-deployment/02_eks_deployment.md) | Deploying manifests, ALB/NLB via Load Balancer Controller, IRSA | K8s app on EKS with LB |
+| 8 | [Terraform Fundamentals](terraform-eks/terraform-fundamentals/01_terraform_fundamentals.md) | Workflow (init/plan/apply), providers, resources, variables, outputs | — |
+| 9 | [Terraform State & Modules](terraform-eks/terraform-state-modules/02_terraform_state_modules.md) | Remote state (S3 + DynamoDB), community modules, dependency graph | EKS cluster via Terraform |
+| 10 | [CI/CD & ECR](portfolio-project/cicd-ecr/01_cicd_ecr.md) | GitHub Actions pipeline, ECR push/pull, automated deploy to EKS | — |
+| 11 | [HPA & Monitoring](portfolio-project/hpa-monitoring/02_hpa_monitoring.md) | Horizontal Pod Autoscaler, CloudWatch Container Insights | — |
+| 12 | [Repo Structure](portfolio-project/repo-structure/03_repo_structure.md) | infra/ vs app/ layout, README docs, cost hygiene | Production microservices platform |
 
 ---
 
@@ -84,19 +85,19 @@
 
 The roadmap follows a layered learning approach:
 
-### Foundations (1–2)
-Cloud concepts, IaaS/PaaS/SaaS, shared responsibility, then **EC2** (instance types, AMIs, key pairs, security groups, Elastic IP). **Project:** Deploy K8s app on EC2 via kind.
+### Foundations (1–3)
+Cloud concepts, IaaS/PaaS/SaaS, shared responsibility, **EC2** (instance types, AMIs, key pairs, security groups, Elastic IP), then **VPC** (CIDR, subnets, IGW, NAT Gateway, route tables, security groups, NACLs). **Projects:** Deploy K8s app on EC2 via kind → Build production VPC with bastion + private app server.
 
-### Application Deployment (3–4)
+### Application Deployment (4–5)
 **RDS** managed PostgreSQL vs self-hosted, **Docker Compose** multi-container orchestration with EBS volumes and env vars. **Project:** FastAPI + PostgreSQL on EC2.
 
-### Container Orchestration (5–6)
+### Container Orchestration (6–7)
 **EKS** architecture, eksctl cluster creation, deploy manifests, **AWS Load Balancer Controller** for ALB/NLB, **IRSA** for pod permissions. **Project:** Migrate K8s app to EKS.
 
-### Infrastructure as Code (7–8)
+### Infrastructure as Code (8–9)
 **Terraform** workflow, resources, variables, outputs, remote state with S3 + DynamoDB locking, community modules. **Project:** EKS cluster via Terraform.
 
-### Capstone Platform (9–11)
+### Capstone Platform (10–12)
 **GitHub Actions** CI/CD pipeline → **ECR** → EKS, **HPA** auto-scaling, **CloudWatch Container Insights**, production repo structure. **Project:** Full microservices platform.
 
 ---
@@ -127,9 +128,12 @@ complete-aws/
 ├── aws-fundamentals/               # Cloud concepts → EC2 (more topics added as we go)
 │   ├── cloud-concepts/
 │   │   └── 01_cloud_concepts.md
-│   └── ec2/
-│       ├── 02_ec2.md
-│       └── (future code)
+│   ├── ec2/
+│   │   ├── 02_ec2.md
+│   │   └── (future code)
+│   └── vpc/
+│       ├── 03_vpc.md
+│       └── images/
 │
 ├── ec2-app-deployment/             # RDS → Docker Compose → S3 backups
 │   ├── rds/
@@ -183,23 +187,23 @@ complete-aws/
 ## 📚 Detailed Learnings
 
 <details>
-<summary><strong>1–2: Cloud Concepts → EC2</strong></summary>
+<summary><strong>1–3: Cloud Concepts → EC2 → VPC</strong></summary>
 
 - Cloud Computing concepts (IaaS vs PaaS vs SaaS) and the Well-Architected Framework
 - **IAM** — Users, groups, roles, policies, and least-privilege principles
 - **EC2** — Instance types, AMIs, key pairs (SSH/RSA), user data, instance metadata, security groups, Elastic IP
-- **VPC** — CIDR blocks, subnets, route tables, Internet Gateway, NAT Gateway/Instance
+- **VPC** — CIDR blocks, subnets (public/private), Internet Gateway, route tables, NAT Gateway, security groups, NACLs
 - **EBS** — Volume types, attaching volumes, snapshots
 - **S3** — Bucket creation, bucket policies, versioning, lifecycle rules
 - **Security Groups** vs NACLs — Stateful vs stateless firewall rules
 - **CloudWatch** — Metrics, log groups, log streams, alarms, CloudWatch agent
 
-**Project:** Deploy K8s app (frontend + backend + PostgreSQL) on EC2 via kind.
+**Projects:** Deploy K8s app on EC2 via kind → Build production VPC with bastion host + private app server, SSH jump box, NAT outbound.
 
 </details>
 
 <details>
-<summary><strong>3–4: RDS → Docker Compose</strong></summary>
+<summary><strong>4–5: RDS → Docker Compose</strong></summary>
 
 - **RDS** — Managed PostgreSQL, Multi-AZ, read replicas, RDS vs self-hosted comparison
 - **Docker Compose** — Multi-container orchestration on a single EC2 host
@@ -213,7 +217,7 @@ complete-aws/
 </details>
 
 <details>
-<summary><strong>5–6: EKS Basics → EKS Deployment</strong></summary>
+<summary><strong>6–7: EKS Basics → EKS Deployment</strong></summary>
 
 - **EKS architecture** — Managed control plane vs self-managed worker nodes
 - **eksctl** — Cluster and node group provisioning
@@ -228,7 +232,7 @@ complete-aws/
 </details>
 
 <details>
-<summary><strong>7–8: Terraform Fundamentals → State & Modules</strong></summary>
+<summary><strong>8–9: Terraform Fundamentals → State & Modules</strong></summary>
 
 - **Terraform workflow** — `init`, `plan`, `apply`, `destroy`
 - **Providers** — AWS provider configuration
@@ -242,7 +246,7 @@ complete-aws/
 </details>
 
 <details>
-<summary><strong>9–11: CI/CD → HPA → Repo Structure</strong></summary>
+<summary><strong>10–12: CI/CD → HPA → Repo Structure</strong></summary>
 
 - **GitHub Actions** — CI/CD pipeline building Docker images → pushing to ECR → deploying to EKS
 - **Amazon ECR** — Private container registry with IAM authentication
